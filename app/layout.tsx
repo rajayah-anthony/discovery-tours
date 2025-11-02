@@ -6,7 +6,7 @@ import Footer from "../components/Footer";
 import ComboCTA from "../components/ComboCTA";
 import BackToTop from "../components/BackToTop"; // ✅ unified
 import HideOnAdmin from "../components/HideOnAdmin"; // ✅ NEW
-import { Suspense } from "react"; // ✅ add this
+import { Suspense } from "react"; // ✅
 
 const geistSans = Geist({ variable: "--font-geist-sans", subsets: ["latin"] });
 const geistMono = Geist_Mono({ variable: "--font-geist-mono", subsets: ["latin"] });
@@ -39,7 +39,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <Footer />
         <BackToTop />
 
-        {/* ✅ Wrap in Suspense because ComboCTA uses useSearchParams */}
+        {/* ✅ Wrap in Suspense because ComboCTA uses useSearchParams via HideOnAdmin/itself */}
         <Suspense fallback={null}>
           <HideOnAdmin>
             <ComboCTA
