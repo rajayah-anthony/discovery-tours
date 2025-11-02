@@ -6,6 +6,7 @@ import Footer from "../components/Footer";
 import ComboCTA from "../components/ComboCTA";
 import BackToTop from "../components/BackToTop"; // ✅ unified
 import HideOnAdmin from "../components/HideOnAdmin"; // ✅ NEW
+import { Suspense } from "react"; // ✅ add this
 
 const geistSans = Geist({ variable: "--font-geist-sans", subsets: ["latin"] });
 const geistMono = Geist_Mono({ variable: "--font-geist-mono", subsets: ["latin"] });
@@ -36,22 +37,22 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         </main>
 
         <Footer />
-
-        {/* ✅ one responsive back-to-top; no duplicates */}
         <BackToTop />
 
-        {/* ✅ Hide ComboCTA on any /admin route */}
-        <HideOnAdmin>
-          <ComboCTA
-            bookingHref={bookingHref}
-            phoneE164={phoneE164}
-            whatsappPhone={whatsappPhone}
-            defaultMessage={waMsg}
-            showOnDesktop
-            showOnMobileBar
-            label="Book / Chat"
-          />
-        </HideOnAdmin>
+        {/* ✅ Wrap in Suspense because ComboCTA uses useSearchParams */}
+        <Suspense fallback={null}>
+          <HideOnAdmin>
+            <ComboCTA
+              bookingHref={bookingHref}
+              phoneE164={phoneE164}
+              whatsappPhone={whatsappPhone}
+              defaultMessage={waMsg}
+              showOnDesktop
+              showOnMobileBar
+              label="Book / Chat"
+            />
+          </HideOnAdmin>
+        </Suspense>
       </body>
     </html>
   );
