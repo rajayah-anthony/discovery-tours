@@ -1,0 +1,40 @@
+/* ===============================
+   Modal Animations & Centering
+   =============================== */
+
+/* Smooth fade + lift effect */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translate(-50%, calc(-50% + 20px));
+        /* start slightly lower */
+    }
+
+    to {
+        opacity: 1;
+        transform: translate(-50%, -50%);
+        /* settle perfectly centered */
+    }
+}
+
+/* Apply to modal container */
+.animate-fadeInUp {
+    animation: fadeInUp 0.3s ease-out;
+}
+
+/* Ensure body lock feels natural (no scrollbar jump) */
+body[style*="position: fixed"] {
+    overflow: hidden;
+    touch-action: none;
+}
+
+/* (Optional) Enhance backdrop blur appearance */
+.backdrop-blur-sm {
+    backdrop-filter: blur(6px);
+}
+
+/* Optional: subtle hover smoothness for buttons */
+button,
+a {
+    transition: all 0.2s ease-in-out;
+}

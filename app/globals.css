@@ -1,10 +1,43 @@
 @import "tailwindcss";
 
+/* ========= Brand tokens ========= */
 :root {
+  /* Light mode base */
   --background: #ffffff;
-  --foreground: #171717;
+  --foreground: #0f172a;
+  /* slate-900 */
+
+  /* Brand */
+  --brand-green: #5fb274;
+  /* navbar tint */
+  --brand-teal: #2e9f9b;
+  /* ocean accent */
+  --brand-ink: #0f172a;
+  /* headings/body */
+  --cta: #ff9f1c;
+  /* orange CTA */
+
+  /* Surfaces (as rgb for alpha mixes) */
+  --panel: 255 255 255;
+  /* white */
+  --glass: 255 255 255;
+
+  /* Borders & rings */
+  --line: 15 23 42;
+  /* slate-900 as rgb */
+  --ring: 59 130 246;
+  /* sky-500 */
+
+  /* Background gradient stops */
+  --bg-1: #f6fbff;
+  /* near-white (blue tint) */
+  --bg-2: #eef9f3;
+  /* mint hint */
+  --bg-3: #eaf5ff;
+  /* sky hint */
 }
 
+/* Tailwind design tokens hook */
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
@@ -12,15 +45,75 @@
   --font-mono: var(--font-geist-mono);
 }
 
+/* Dark mode (kept simple) */
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+    --background: #0a0f12;
+    --foreground: #e5eef5;
+
+    --brand-green: #58c089;
+    --brand-teal: #33b0ac;
+
+    --panel: 17 23 28;
+    /* near black as rgb */
+    --glass: 17 23 28;
+    --line: 229 238 245;
+    /* light line */
   }
 }
 
+/* ========= Global background ========= */
+html {
+  /* prevent layout shift when content changes height */
+  scrollbar-gutter: stable both-edges;
+}
+
 body {
-  background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-geist-sans, Arial), system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji";
+  /* Gentle brandy gradient with two radials for depth */
+  background:
+    radial-gradient(1200px 600px at 15% -10%, rgba(46, 159, 155, .12), transparent 60%),
+    radial-gradient(900px 500px at 85% -10%, rgba(95, 178, 116, .14), transparent 60%),
+    linear-gradient(180deg, var(--bg-1), var(--bg-2) 40%, var(--bg-3) 100%);
+}
+
+/* Optional: super-subtle noise for texture (comment out if not needed) */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3CfeComponentTransfer%3E%3CfeFuncA type='table' tableValues='0 0 0 .015'/%3E%3C/feComponentTransfer%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  opacity: .35;
+}
+
+/* ========= Reusable glass helpers ========= */
+.glass {
+  background-color: rgba(var(--glass), .28);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(var(--line), .08);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, .06);
+}
+
+.glass-strong {
+  background-color: rgba(var(--glass), .45);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border: 1px solid rgba(var(--line), .12);
+  box-shadow: 0 14px 40px rgba(0, 0, 0, .10);
+}
+
+/* Nice rounded “soft card” if you need it */
+.card-soft {
+  background: rgba(var(--panel), .9);
+  border: 1px solid rgba(var(--line), .06);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, .06);
+  border-radius: 1rem;
+}
+
+/* Utility: gradient brand underline (for small accents) */
+.brand-underline {
+  background-image: linear-gradient(90deg, var(--brand-teal), var(--brand-green));
 }
