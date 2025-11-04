@@ -1,6 +1,9 @@
 // lib/tours.ts
 import type * as GeoJSON from "geojson";
 
+/** Regions we support across the site */
+export type Region = "Sabah" | "Sarawak" | "Brunei" | "Peninsular Malaysia";
+
 export type Tour = {
   slug: string;
   title: string;
@@ -11,21 +14,33 @@ export type Tour = {
   gallery?: string[];
   description?: string;
   includes?: string[];
-  itinerary?: string[]; // optional extra field for daily itinerary
+  itinerary?: string[];
   tags?: string[];
   featured?: boolean;
 
-  // 👇 New: map data for Google Maps component
+  /** NEW: classification for filtering and subpages */
+  region?: Region;
+
+  // Map data (optional)
   map?: {
     center?: [number, number]; // [lat,lng]
     markers?: { position: [number, number]; label?: string; href?: string }[];
-    route?: Array<[number, number]>; // simple polyline
-    routeGeoJson?: GeoJSON.FeatureCollection; // complex shapes (optional)
+    route?: Array<[number, number]>;
+    routeGeoJson?: GeoJSON.FeatureCollection;
   };
 };
 
 // Helper to make a Google Maps link from coords
 const gm = (lat: number, lng: number) => `https://www.google.com/maps?q=${lat},${lng}`;
+
+/** Infer region from location if region is not explicitly set */
+const inferRegion = (location: string): Region => {
+  const loc = location.toLowerCase();
+  if (loc.includes("sabah")) return "Sabah";
+  if (loc.includes("sarawak")) return "Sarawak";
+  if (loc.includes("brunei")) return "Brunei";
+  return "Peninsular Malaysia";
+};
 
 export const tourData: Tour[] = [
   {
@@ -43,22 +58,15 @@ export const tourData: Tour[] = [
     includes: ["Licensed guide", "Breakfast", "Transport", "Insurance"],
     tags: ["Adventure", "Nature"],
     featured: true,
+    region: "Sabah",
     map: {
-      center: [6.0744, 116.5588], // Kinabalu Park HQ (approx)
+      center: [6.0744, 116.5588],
       markers: [
-        {
-          position: [6.0744, 116.5588],
-          label: "Kinabalu Park HQ",
-          href: gm(6.0744, 116.5588),
-        },
-        {
-          position: [6.0240, 116.6114], // Timpohon Gate (approx)
-          label: "Timpohon Gate",
-          href: gm(6.0240, 116.6114),
-        },
+        { position: [6.0744, 116.5588], label: "Kinabalu Park HQ", href: gm(6.0744, 116.5588) },
+        { position: [6.024, 116.6114], label: "Timpohon Gate", href: gm(6.024, 116.6114) },
       ],
       route: [
-        [6.0240, 116.6114],
+        [6.024, 116.6114],
         [6.0744, 116.5588],
       ],
     },
@@ -77,15 +85,10 @@ export const tourData: Tour[] = [
     includes: ["Boat cruise", "Hi-tea & dinner", "Guide", "Insurance"],
     tags: ["Wildlife", "Family"],
     featured: true,
+    region: "Sabah",
     map: {
-      center: [5.3178, 115.6515], // Klias wetlands (approx)
-      markers: [
-        {
-          position: [5.3178, 115.6515],
-          label: "Klias Wetlands Jetty",
-          href: gm(5.3178, 115.6515),
-        },
-      ],
+      center: [5.3178, 115.6515],
+      markers: [{ position: [5.3178, 115.6515], label: "Klias Wetlands Jetty", href: gm(5.3178, 115.6515) }],
     },
   },
   {
@@ -102,17 +105,18 @@ export const tourData: Tour[] = [
     includes: ["Licensed guide", "Bottle water"],
     tags: ["Culture", "Easy"],
     featured: true,
+    region: "Sabah",
     map: {
-      center: [5.9804, 116.0735], // KK downtown
+      center: [5.9804, 116.0735],
       markers: [
         { position: [5.9817, 116.0762], label: "Atkinson Clock Tower", href: gm(5.9817, 116.0762) },
         { position: [5.9863, 116.0785], label: "Gaya Street", href: gm(5.9863, 116.0785) },
         { position: [5.9781, 116.0715], label: "KK Waterfront", href: gm(5.9781, 116.0715) },
       ],
       route: [
-        [5.9863, 116.0785], // Gaya Street
-        [5.9817, 116.0762], // Atkinson Clock Tower
-        [5.9781, 116.0715], // KK Waterfront
+        [5.9863, 116.0785],
+        [5.9817, 116.0762],
+        [5.9781, 116.0715],
       ],
     },
   },
@@ -126,6 +130,7 @@ export const tourData: Tour[] = [
     price: "From RM998 / pax",
     image: "/images/matta-fair.jpg",
     featured: true,
+    region: "Sabah",
     gallery: [
       "/images/matta-fair.jpg",
       "/images/kinabalu.jpg",
@@ -153,7 +158,7 @@ export const tourData: Tour[] = [
     ],
     tags: ["Package", "Family", "Nature", "Promotion"],
     map: {
-      center: [5.9804, 116.0735], // Start KK
+      center: [5.9804, 116.0735],
       markers: [
         { position: [5.9804, 116.0735], label: "Kota Kinabalu City", href: gm(5.9804, 116.0735) },
         { position: [6.0744, 116.5588], label: "Kinabalu Park HQ", href: gm(6.0744, 116.5588) },
@@ -161,11 +166,59 @@ export const tourData: Tour[] = [
         { position: [6.0205, 116.6065], label: "Desa Dairy Farm", href: gm(6.0205, 116.6065) },
       ],
       route: [
-        [5.9804, 116.0735], // KK
-        [6.0744, 116.5588], // Kinabalu Park HQ
-        [6.0503, 116.7186], // Poring
-        [6.0205, 116.6065], // Desa Dairy
+        [5.9804, 116.0735],
+        [6.0744, 116.5588],
+        [6.0503, 116.7186],
+        [6.0205, 116.6065],
       ],
     },
   },
+
+  // 🆕 Borneo packages (Matta Fair)
+  {
+    slug: "maliau-basin-4d3n-matta",
+    title: "4D3N Maliau Basin (Matta Fair)",
+    location: "Maliau Basin, Sabah",
+    duration: "4 Days 3 Nights",
+    price: "On request",
+    image: "/images/maliau.jpg",
+    description: "Deep rainforest expedition in Sabah’s ‘Lost World’.",
+    tags: ["Jungle Trek", "Borneo"],
+    region: "Sabah",
+  },
+  {
+    slug: "trusmadi-3d2n-matta",
+    title: "3D2N Explore Trusmadi (Matta Fair)",
+    location: "Trusmadi, Sabah",
+    duration: "3 Days 2 Nights",
+    price: "On request",
+    image: "/images/trusmadi.jpg",
+    description: "Climb Malaysia’s second-highest peak.",
+    tags: ["Hike", "Summit", "Borneo"],
+    region: "Sabah",
+  },
+  {
+    slug: "nexus-karambunai-3d2n-matta",
+    title: "3D2N Nexus Karambunai (Matta Fair)",
+    location: "Kota Kinabalu, Sabah",
+    duration: "3 Days 2 Nights",
+    price: "On request",
+    image: "/images/karambunai.jpg",
+    description: "Resort leisure stay with beach and spa indulgence.",
+    tags: ["Resort", "Leisure", "Borneo"],
+    region: "Sabah",
+  },
 ];
+
+/** Convenience helpers */
+export const getToursByRegion = (region: Region) =>
+  tourData.filter(
+    (t) => (t.region ?? inferRegion(t.location)) === region
+  );
+
+export const getBorneoTours = () =>
+  tourData.filter((t) => {
+    const r = t.region ?? inferRegion(t.location);
+    return r === "Sabah" || r === "Sarawak" || r === "Brunei";
+  });
+

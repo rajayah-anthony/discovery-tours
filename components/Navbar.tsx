@@ -6,6 +6,9 @@ import { usePathname } from "next/navigation";
 import { MouseEvent, useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 
+/* NEW: import deals helpers for live badge */
+import { deals, isActiveDeal } from "../lib/deals";
+
 /* =======================
    Portal for modal/drawer
 ======================= */
@@ -60,7 +63,7 @@ export default function Navbar() {
 
     /* Prevent layout jump */
     useEffect(() => {
-        document.documentElement.style.scrollbarGutter = "stable both-edges";
+        (document.documentElement as any).style.scrollbarGutter = "stable both-edges";
     }, []);
 
     const linkBase =
@@ -190,6 +193,10 @@ export default function Navbar() {
         </div>
     );
 
+    /* NEW: compute active deals count for badges */
+    const activeDealsCount = deals.filter(d => isActiveDeal(d)).length;
+    const hasActiveDeals = activeDealsCount > 0;
+
     return (
         <>
             {/* ===== Desktop Navbar + Centered Mobile Logo ===== */}
@@ -238,49 +245,115 @@ export default function Navbar() {
                         {dropdown(
                             "dest",
                             "Destinations",
-                            <div className="p-6 w-[640px] grid grid-cols-2 gap-4">
-                                {[
-                                    {
-                                        name: "Kota Kinabalu",
-                                        href: "/destinations/kota-kinabalu",
-                                        img: "/images/kk-heritage.jpg",
-                                    },
-                                    {
-                                        name: "Kundasang",
-                                        href: "/destinations/kundasang",
-                                        img: "/images/kundasang-farm.jpg",
-                                    },
-                                    {
-                                        name: "Sandakan",
-                                        href: "/destinations/sandakan",
-                                        img: "/images/klias-river.jpg",
-                                    },
-                                    {
-                                        name: "Semporna",
-                                        href: "/destinations/semporna",
-                                        img: "/images/island-hopping.jpg",
-                                    },
-                                ].map((d) => (
-                                    <Link
-                                        key={d.name}
-                                        href={d.href}
-                                        className="relative overflow-hidden rounded-xl group"
-                                    >
-                                        <Image
-                                            src={d.img}
-                                            alt={d.name}
-                                            width={320}
-                                            height={200}
-                                            className="object-cover h-36 w-full group-hover:scale-105 transition-transform"
-                                        />
-                                        <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent" />
-                                        <div className="absolute bottom-2 left-3 text-white text-sm font-semibold">
-                                            {d.name}
+                            /* ====== NEW Mega menu: Malaysia & Borneo ====== */
+                            <div className="p-6 w-[760px] grid grid-cols-2 gap-6">
+                                {/* Malaysia column */}
+                                <div className="space-y-3">
+                                    <div className="flex items-center justify-between">
+                                        <div>
+                                            <p className="text-xs uppercase tracking-wide text-slate-500">Explore</p>
+                                            <h4 className="text-base font-semibold">Malaysia 🇲🇾</h4>
                                         </div>
-                                    </Link>
-                                ))}
+                                        <Link
+                                            href="/destinations/malaysia"
+                                            className="text-xs inline-flex items-center gap-1 rounded-lg border px-2 py-1 hover:bg-slate-50"
+                                        >
+                                            View all
+                                            <svg viewBox="0 0 24 24" className="h-4 w-4" fill="none" stroke="currentColor" strokeWidth={2}>
+                                                <path d="M5 12h14M13 5l7 7-7 7" />
+                                            </svg>
+                                        </Link>
+                                    </div>
 
-                                {/* All Destinations link */}
+                                    {/* Featured Malaysia packages */}
+                                    <div className="grid grid-cols-1 gap-3">
+                                        <Link href="/packages/langkawi-island-4d3n" className="group flex items-center gap-3 rounded-xl border p-3 hover:bg-slate-50">
+                                            <Image src="/images/langkawi.jpg" alt="4D3N Langkawi Island" width={80} height={60} className="h-16 w-20 object-cover rounded-lg" />
+                                            <div>
+                                                <p className="font-medium">4D3N Langkawi Island</p>
+                                                <p className="text-xs text-slate-600">Beaches • SkyCab • Island tour</p>
+                                            </div>
+                                        </Link>
+
+                                        <Link href="/packages/cultural-heritage-7d6n" className="group flex items-center gap-3 rounded-xl border p-3 hover:bg-slate-50">
+                                            <Image src="/images/malaysia-heritage.jpg" alt="7D6N Cultural Heritage Tours" width={80} height={60} className="h-16 w-20 object-cover rounded-lg" />
+                                            <div>
+                                                <p className="font-medium">7D6N Cultural Heritage Tours</p>
+                                                <p className="text-xs text-slate-600">KL • Melaka • Penang</p>
+                                            </div>
+                                        </Link>
+
+                                        <Link href="/packages/peninsular-highlights-10d9n" className="group flex items-center gap-3 rounded-xl border p-3 hover:bg-slate-50">
+                                            <Image src="/images/malaysia-kl.jpg" alt="10D9N Peninsular Highlights" width={80} height={60} className="h-16 w-20 object-cover rounded-lg" />
+                                            <div>
+                                                <p className="font-medium">10D9N Peninsular Highlights</p>
+                                                <p className="text-xs text-slate-600">KL • Cameron Highlands • Taman Negara</p>
+                                            </div>
+                                        </Link>
+                                    </div>
+                                </div>
+
+
+                                {/* Borneo column */}
+                                <div className="space-y-3">
+                                    <div className="flex items-center justify-between">
+                                        <div>
+                                            <p className="text-xs uppercase tracking-wide text-slate-500">
+                                                Discover
+                                            </p>
+                                            <h4 className="text-base font-semibold">Borneo 🌴</h4>
+                                        </div>
+                                        <Link
+                                            href="/destinations/borneo"
+                                            className="text-xs inline-flex items-center gap-1 rounded-lg border px-2 py-1 hover:bg-slate-50"
+                                        >
+                                            View all
+                                            <svg viewBox="0 0 24 24" className="h-4 w-4" fill="none" stroke="currentColor" strokeWidth={2}>
+                                                <path d="M5 12h14M13 5l7 7-7 7" />
+                                            </svg>
+                                        </Link>
+                                    </div>
+
+                                    <div className="grid grid-cols-1 gap-3">
+                                        {/* Featured Matta Fair / Sabah picks */}
+                                        <Link href="/packages/maliau-basin-4d3n-matta" className="group flex items-center gap-3 rounded-xl border p-3 hover:bg-slate-50">
+                                            <Image src="/images/maliau.jpg" alt="4D3N Maliau Basin (Matta Fair)" width={80} height={60} className="h-16 w-20 object-cover rounded-lg" />
+                                            <div>
+                                                <p className="font-medium">4D3N Maliau Basin (Matta Fair)</p>
+                                                <p className="text-xs text-slate-600">Sabah Adventures</p>
+                                            </div>
+                                        </Link>
+                                        <Link href="/packages/trusmadi-3d2n-matta" className="group flex items-center gap-3 rounded-xl border p-3 hover:bg-slate-50">
+                                            <Image src="/images/trusmadi.jpg" alt="3D2N Explore Trusmadi (Matta Fair)" width={80} height={60} className="h-16 w-20 object-cover rounded-lg" />
+                                            <div>
+                                                <p className="font-medium">3D2N Explore Trusmadi (Matta Fair)</p>
+                                                <p className="text-xs text-slate-600">Sabah Adventures</p>
+                                            </div>
+                                        </Link>
+                                        <Link href="/packages/nexus-karambunai-3d2n-matta" className="group flex items-center gap-3 rounded-xl border p-3 hover:bg-slate-50">
+                                            <Image src="/images/karambunai.jpg" alt="3D2N Nexus Karambunai (Matta Fair)" width={80} height={60} className="h-16 w-20 object-cover rounded-lg" />
+                                            <div>
+                                                <p className="font-medium">3D2N Nexus Karambunai (Matta Fair)</p>
+                                                <p className="text-xs text-slate-600">Resort &amp; Leisure</p>
+                                            </div>
+                                        </Link>
+
+                                        {/* Parent region quick links */}
+                                        <div className="flex gap-2 pt-1">
+                                            <Link href="/destinations/borneo/sabah" className="text-xs rounded-lg px-2 py-1 ring-1 ring-slate-200 hover:bg-slate-50">
+                                                Sabah
+                                            </Link>
+                                            <Link href="/destinations/borneo/sarawak" className="text-xs rounded-lg px-2 py-1 ring-1 ring-slate-200 hover:bg-slate-50">
+                                                Sarawak
+                                            </Link>
+                                            <Link href="/destinations/borneo/brunei" className="text-xs rounded-lg px-2 py-1 ring-1 ring-slate-200 hover:bg-slate-50">
+                                                Brunei
+                                            </Link>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                {/* All Destinations */}
                                 <Link
                                     href="/destinations"
                                     className="col-span-2 mt-1 inline-flex items-center justify-center gap-2 rounded-xl border bg-white px-4 py-3 hover:bg-slate-50"
@@ -320,6 +393,19 @@ export default function Navbar() {
                                 ))}
                             </ul>
                         )}
+
+                        {/* NEW: Deals link */}
+                        <Link
+                            href="/deals"
+                            className={`${linkBase} ${underline} inline-flex items-center gap-2`}
+                        >
+                            <span className="font-semibold">Deals</span>
+                            {hasActiveDeals && (
+                                <span className="inline-flex items-center rounded-full bg-emerald-50 text-emerald-700 ring-1 ring-emerald-200 px-2 py-0.5 text-xs">
+                                    {activeDealsCount} active
+                                </span>
+                            )}
+                        </Link>
 
                         {dropdown(
                             "about",
@@ -446,6 +532,22 @@ export default function Navbar() {
                                 </button>
                             </div>
 
+                            {/* NEW: prominent Deals pill (mobile) */}
+                            <Link
+                                href="/deals"
+                                onClick={closeDrawer}
+                                className="mb-3 inline-flex items-center justify-between rounded-2xl border border-emerald-200 bg-emerald-50 px-4 py-3"
+                            >
+                                <span className="font-medium text-emerald-800">Deals</span>
+                                {hasActiveDeals ? (
+                                    <span className="text-xs rounded-full bg-white ring-1 ring-emerald-200 px-2 py-0.5 text-emerald-700">
+                                        {activeDealsCount} active
+                                    </span>
+                                ) : (
+                                    <span className="text-xs text-emerald-700">See offers</span>
+                                )}
+                            </Link>
+
                             {/* Scrollable accordion area */}
                             <div className="space-y-2 overflow-y-auto pr-1">
                                 {["dest", "exp", "about", "help"].map((id) => {
@@ -483,11 +585,34 @@ export default function Navbar() {
                                                 <div className="overflow-hidden">
                                                     {id === "dest" && (
                                                         <nav className="flex flex-col pb-3 pl-3">
-                                                            <Link href="/destinations/kota-kinabalu" onClick={closeDrawer} className="py-2 hover:text-sky-700">Kota Kinabalu</Link>
-                                                            <Link href="/destinations/kundasang" onClick={closeDrawer} className="py-2 hover:text-sky-700">Kundasang</Link>
-                                                            <Link href="/destinations/sandakan" onClick={closeDrawer} className="py-2 hover:text-sky-700">Sandakan</Link>
-                                                            <Link href="/destinations/semporna" onClick={closeDrawer} className="py-2 hover:text-sky-700">Semporna</Link>
-                                                            <Link href="/destinations" onClick={closeDrawer} className="py-2 hover:text-sky-700">All Destinations</Link>
+                                                            {/* Featured package deep-links (Malaysia) */}
+                                                            <p className="mt-4 mb-2 text-xs uppercase tracking-wide text-slate-500">Featured (Malaysia)</p>
+                                                            <Link href="/packages/langkawi-island-4d3n" onClick={closeDrawer} className="py-2 hover:text-sky-700">
+                                                                4D3N Langkawi Island
+                                                            </Link>
+                                                            <Link href="/packages/cultural-heritage-7d6n" onClick={closeDrawer} className="py-2 hover:text-sky-700">
+                                                                7D6N Cultural Heritage Tours
+                                                            </Link>
+                                                            <Link href="/packages/peninsular-highlights-10d9n" onClick={closeDrawer} className="py-2 hover:text-sky-700">
+                                                                10D9N Peninsular Highlights
+                                                            </Link>
+
+
+                                                            <p className="mt-4 mb-2 text-xs uppercase tracking-wide text-slate-500">Borneo</p>
+                                                            <Link href="/destinations/borneo" onClick={closeDrawer} className="py-2 hover:text-sky-700">All Borneo</Link>
+                                                            <Link href="/destinations/borneo/sabah" onClick={closeDrawer} className="py-2 hover:text-sky-700">Sabah</Link>
+                                                            <Link href="/destinations/borneo/sarawak" onClick={closeDrawer} className="py-2 hover:text-sky-700">Sarawak</Link>
+                                                            <Link href="/destinations/borneo/brunei" onClick={closeDrawer} className="py-2 hover:text-sky-700">Brunei</Link>
+
+                                                            {/* Featured package deep-links */}
+                                                            <p className="mt-4 mb-2 text-xs uppercase tracking-wide text-slate-500">Featured (Borneo)</p>
+                                                            <Link href="/packages/maliau-basin-4d3n-matta" onClick={closeDrawer} className="py-2 hover:text-sky-700">4D3N Maliau Basin (Matta Fair)</Link>
+                                                            <Link href="/packages/trusmadi-3d2n-matta" onClick={closeDrawer} className="py-2 hover:text-sky-700">3D2N Explore Trusmadi (Matta Fair)</Link>
+                                                            <Link href="/packages/nexus-karambunai-3d2n-matta" onClick={closeDrawer} className="py-2 hover:text-sky-700">3D2N Nexus Karambunai (Matta Fair)</Link>
+
+                                                            <Link href="/destinations" onClick={closeDrawer} className="py-2 mt-2 rounded-lg ring-1 ring-slate-200 inline-flex items-center justify-center w-max px-3 hover:bg-slate-50">
+                                                                All Destinations
+                                                            </Link>
                                                         </nav>
                                                     )}
                                                     {id === "exp" && (

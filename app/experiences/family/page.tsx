@@ -1,19 +1,19 @@
-// app/experiences/culture/page.tsx
+// app/experiences/family/page.tsx
 import Link from "next/link";
-import { MapPin, Clock, Landmark, BookOpen, Music } from "lucide-react";
+import { MapPin, Clock, Users, Sun, BookOpen, Sparkles } from "lucide-react";
 
 export const metadata = {
-    title: "Culture & Heritage | Discovery Tours",
+    title: "Family Friendly | Discovery Tours",
     description:
-        "Village visits, heritage walks, living traditions, and museums across Sabah & Borneo (demo).",
+        "Easy-paced, kid-approved experiences—islands, wildlife, and gentle scenic days (demo).",
 };
 
-type CultureCard = {
+type FamilyCard = {
     slug: string;
     title: string;
     location: string;
     duration: string;
-    theme: "Heritage Walk" | "Living Culture" | "Museums" | "Memorial";
+    theme: "Easy" | "Learning" | "Playtime";
     blurb: string;
     priceFrom?: string;
     tags?: string[];
@@ -23,86 +23,85 @@ const experiencesNav = [
     { label: "Adventure", href: "/experiences/adventure" },
     { label: "Wildlife", href: "/experiences/wildlife" },
     { label: "Islands & Beaches", href: "/experiences/islands" },
-    { label: "Culture & Heritage", href: "/experiences/culture", active: true },
+    { label: "Culture & Heritage", href: "/experiences/culture" },
     { label: "Nature & Scenic", href: "/experiences/nature" },
-    { label: "Family Friendly", href: "/experiences/family" },
+    { label: "Family Friendly", href: "/experiences/family", active: true },
 ];
 
-const cards: CultureCard[] = [
+const cards: FamilyCard[] = [
     {
-        slug: "kk-old-town-heritage-walk",
-        title: "Kota Kinabalu Old Town Heritage Walk (Demo)",
-        location: "Kota Kinabalu",
-        duration: "Half Day (AM/PM)",
-        theme: "Heritage Walk",
+        slug: "tarp-family-island-day",
+        title: "TARP Family Island Day (Demo)",
+        location: "KK — Manukan / Mamutik / Sapi",
+        duration: "Full Day",
+        theme: "Playtime",
         blurb:
-            "From WWII remnants to post-war shoplots—stories, street snacks, and seafront views with a local guide.",
-        priceFrom: "RM160",
-        tags: ["WWII", "Local Bites", "History"],
+            "Shallow lagoons, beginner-friendly snorkel spots, and plenty of shade. Great for mixed ages.",
+        priceFrom: "RM220",
+        tags: ["Snorkel", "Beach Time", "Boat"],
     },
     {
-        slug: "mari-mari-cultural-village",
-        title: "Mari Mari Cultural Village (Demo)",
+        slug: "desa-dairy-family",
+        title: "Desa Dairy + Kundasang Easy Day (Demo)",
+        location: "Kundasang",
+        duration: "Full Day",
+        theme: "Easy",
+        blurb:
+            "Alpine-style pastures, fresh dairy treats, and short scenic stops—zero rushing, maximum smiles.",
+        priceFrom: "RM180",
+        tags: ["Views", "Treats", "Photo Spots"],
+    },
+    {
+        slug: "lok-kawi-zoo-museum",
+        title: "Lok Kawi & Marine Museum Combo (Demo)",
+        location: "KK / UMS",
+        duration: "Half / Full Day",
+        theme: "Learning",
+        blurb:
+            "A gentle wildlife stop plus aquaria & touch-and-learn exhibits—fun, educational, and close to town.",
+        priceFrom: "RM190",
+        tags: ["Wildlife", "Aquaria", "Easy"],
+    },
+    {
+        slug: "sunset-cruise-family",
+        title: "KK Sunset Cruise (Family) (Demo)",
+        location: "KK Waterfront",
+        duration: "2 Hours",
+        theme: "Easy",
+        blurb:
+            "Golden hour views, light music, and comfy seating. Stroller-friendly with deck railings.",
+        priceFrom: "RM160",
+        tags: ["Sunset", "City Skyline", "Music"],
+    },
+    {
+        slug: "mari-mari-kids",
+        title: "Mari Mari Cultural Village (Kids Focus) (Demo)",
         location: "Inanam / KK Outskirts",
         duration: "Half Day",
-        theme: "Living Culture",
+        theme: "Learning",
         blurb:
-            "Traditional homes, costumes, blowpipe demo, and tasting sessions—immersive snapshot of Sabahan tribes.",
+            "Hands-on demos (fire-making, blowpipe) and bite-size culture stories designed to keep kids engaged.",
         priceFrom: "RM220",
-        tags: ["Demo", "Food Tasting", "Hands-on"],
+        tags: ["Hands-on", "Snacks", "Culture"],
     },
     {
-        slug: "monsopiad-heritage-village",
-        title: "Monsopiad Heritage Village (Demo)",
-        location: "Penampang",
-        duration: "Half Day",
-        theme: "Living Culture",
-        blurb:
-            "Legend of Monsopiad, Kadazandusun artifacts, and bamboo dance rhythms by the river village.",
-        priceFrom: "RM210",
-        tags: ["Kadazandusun", "Folklore", "Dance"],
-    },
-    {
-        slug: "sandakan-heritage-trail",
-        title: "Sandakan Heritage Trail & Agnes Keith (Demo)",
-        location: "Sandakan",
+        slug: "poring-canopy-easy",
+        title: "Poring Hot Springs + Easy Canopy (Demo)",
+        location: "Poring / Ranau",
         duration: "Full Day",
-        theme: "Heritage Walk",
+        theme: "Playtime",
         blurb:
-            "St. Michael’s Church, Agnes Keith House, and English Tea House—colonial echoes & coastal views.",
-        priceFrom: "RM320",
-        tags: ["Colonial", "Architecture", "Tea"],
-    },
-    {
-        slug: "labuan-war-memorial-museum",
-        title: "Labuan War Memorial & Museum (Demo)",
-        location: "Labuan",
-        duration: "Full Day",
-        theme: "Memorial",
-        blurb:
-            "Commonwealth War Graves, WWII museum narratives, and island history that shaped Borneo’s coast.",
-        priceFrom: "RM380",
-        tags: ["WWII", "Memorial", "Island"],
-    },
-    {
-        slug: "rungus-longhouse-experience",
-        title: "Rungus Longhouse Experience (Demo)",
-        location: "Kudat",
-        duration: "Full Day / 2D1N",
-        theme: "Living Culture",
-        blurb:
-            "Beads, gong music, and longhouse life—authentic craft traditions at the northern tip of Borneo.",
-        priceFrom: "RM450",
-        tags: ["Crafts", "Gong", "Homestay"],
+            "Short canopy walk options, shallow soak pools, and plenty of rest areas—doable with little ones.",
+        priceFrom: "RM220",
+        tags: ["Soak", "Shade", "Short Walks"],
     },
 ];
 
-function ThemeBadge({ theme }: { theme: CultureCard["theme"] }) {
+function ThemeBadge({ theme }: { theme: FamilyCard["theme"] }) {
     const map = {
-        "Heritage Walk": { cls: "bg-rose-50 text-rose-700 ring-rose-200", Icon: Landmark },
-        "Living Culture": { cls: "bg-amber-50 text-amber-700 ring-amber-200", Icon: Music },
-        Museums: { cls: "bg-indigo-50 text-indigo-700 ring-indigo-200", Icon: BookOpen },
-        Memorial: { cls: "bg-slate-50 text-slate-700 ring-slate-200", Icon: Landmark },
+        Easy: { cls: "bg-amber-50 text-amber-700 ring-amber-200", Icon: Sun },
+        Learning: { cls: "bg-indigo-50 text-indigo-700 ring-indigo-200", Icon: BookOpen },
+        Playtime: { cls: "bg-emerald-50 text-emerald-700 ring-emerald-200", Icon: Sparkles },
     } as const;
     const { cls, Icon } = map[theme];
     return (
@@ -115,20 +114,22 @@ function ThemeBadge({ theme }: { theme: CultureCard["theme"] }) {
     );
 }
 
-export default function CultureHeritagePage() {
+export default function FamilyFriendlyPage() {
     return (
-        <main className="min-h-screen bg-gradient-to-b from-rose-50 to-white">
+        <main className="min-h-screen bg-gradient-to-b from-amber-50/70 to-white">
             {/* --- Hero --- */}
             <section className="relative overflow-hidden">
                 <div className="mx-auto max-w-7xl px-6 pt-12 pb-8">
                     <div className="flex flex-wrap items-start justify-between gap-6">
                         <div>
-                            <p className="text-sm font-semibold tracking-wider text-rose-700/90">Experiences</p>
+                            <p className="text-sm font-semibold tracking-wider text-amber-700/90">
+                                Experiences
+                            </p>
                             <h1 className="mt-2 text-3xl md:text-4xl font-extrabold text-gray-900 tracking-tight">
-                                Culture & Heritage
+                                Family Friendly
                             </h1>
                             <p className="mt-3 max-w-2xl text-gray-600">
-                                Heritage walks, village traditions, and museum stories. This is a{" "}
+                                Easy-paced days, stroller-friendly stops, and kid-approved fun. This is a{" "}
                                 <span className="font-medium text-gray-800">demo</span> showcase—real listings will
                                 appear once connected to your CMS.
                             </p>
@@ -136,9 +137,9 @@ export default function CultureHeritagePage() {
 
                         <div className="rounded-2xl bg-white/70 backdrop-blur ring-1 ring-gray-200 p-4 md:p-5">
                             <div className="flex items-center gap-3">
-                                <Landmark className="h-6 w-6 text-rose-600" />
+                                <Users className="h-6 w-6 text-amber-600" />
                                 <div>
-                                    <p className="text-sm text-gray-500">Prefer wildlife or islands?</p>
+                                    <p className="text-sm text-gray-500">Prefer islands or wildlife?</p>
                                     <p className="text-sm font-medium text-gray-800">Switch categories below →</p>
                                 </div>
                             </div>
@@ -155,7 +156,7 @@ export default function CultureHeritagePage() {
                                         className={[
                                             "inline-flex items-center rounded-full px-4 py-2 text-sm ring-1 transition",
                                             item.active
-                                                ? "bg-rose-600 text-white ring-rose-600"
+                                                ? "bg-amber-600 text-white ring-amber-600"
                                                 : "bg-white text-gray-700 ring-gray-200 hover:bg-gray-50",
                                         ].join(" ")}
                                         aria-current={item.active ? "page" : undefined}
@@ -179,8 +180,8 @@ export default function CultureHeritagePage() {
                             className="group relative overflow-hidden rounded-2xl bg-white ring-1 ring-gray-200 transition hover:shadow-lg"
                         >
                             {/* Simple graphic header (image-agnostic) */}
-                            <div className="h-28 bg-gradient-to-br from-rose-200 via-rose-100 to-white grid place-content-center">
-                                <Landmark className="h-8 w-8 text-rose-700 opacity-80" />
+                            <div className="h-28 bg-gradient-to-br from-amber-200 via-amber-100 to-white grid place-content-center">
+                                <Users className="h-8 w-8 text-amber-700 opacity-80" />
                             </div>
 
                             <div className="p-6">
@@ -193,7 +194,7 @@ export default function CultureHeritagePage() {
                                     )}
                                 </div>
 
-                                <h3 className="mt-3 text-lg font-semibold text-gray-900 group-hover:text-rose-700">
+                                <h3 className="mt-3 text-lg font-semibold text-gray-900 group-hover:text-amber-700">
                                     {c.title}
                                 </h3>
 
@@ -213,7 +214,7 @@ export default function CultureHeritagePage() {
                                         {c.tags.map((t) => (
                                             <span
                                                 key={t}
-                                                className="rounded-full bg-rose-50 text-rose-800 ring-1 ring-rose-200 px-2.5 py-1 text-xs"
+                                                className="rounded-full bg-amber-50 text-amber-800 ring-1 ring-amber-200 px-2.5 py-1 text-xs"
                                             >
                                                 {t}
                                             </span>
@@ -224,7 +225,7 @@ export default function CultureHeritagePage() {
                                 <div className="mt-6 flex items-center gap-3">
                                     <Link
                                         href={`/tours/${c.slug}`}
-                                        className="inline-flex items-center justify-center rounded-lg bg-rose-600 px-3.5 py-2 text-sm font-medium text-white shadow-sm hover:bg-rose-700 focus:outline-none focus:ring-2 focus:ring-rose-600 focus:ring-offset-2"
+                                        className="inline-flex items-center justify-center rounded-lg bg-amber-600 px-3.5 py-2 text-sm font-medium text-white shadow-sm hover:bg-amber-700 focus:outline-none focus:ring-2 focus:ring-amber-600 focus:ring-offset-2"
                                     >
                                         View details
                                     </Link>
@@ -240,7 +241,7 @@ export default function CultureHeritagePage() {
                 {/* --- Bottom CTA --- */}
                 <div className="mt-10 flex flex-col items-center justify-center gap-4 rounded-2xl bg-white p-6 ring-1 ring-gray-200 md:flex-row md:gap-6">
                     <p className="text-center text-sm text-gray-700">
-                        Want a culture-first custom itinerary?
+                        Need pram-friendly, nap-safe timing, or multi-gen pacing?
                     </p>
                     <div className="flex gap-3">
                         <Link

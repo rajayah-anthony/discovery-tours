@@ -1,21 +1,262 @@
+// app/experiences/wildlife/page.tsx
+import Link from "next/link";
+import { MapPin, Clock, Leaf, Fish, Heart } from "lucide-react";
+
 export const metadata = {
     title: "Wildlife | Discovery Tours",
-    description: "Demo page for Wildlife experiences.",
+    description:
+        "River safaris, night walks, and conservation highlights across Sabah & Borneo (demo).",
 };
+
+type WildlifeCard = {
+    slug: string;
+    title: string;
+    location: string;
+    duration: string;
+    theme: "River" | "Forest" | "Conservation";
+    blurb: string;
+    priceFrom?: string;
+    tags?: string[];
+};
+
+const experiencesNav = [
+    { label: "Adventure", href: "/experiences/adventure" },
+    { label: "Wildlife", href: "/experiences/wildlife", active: true },
+    { label: "Islands & Beaches", href: "/experiences/islands" },
+    { label: "Culture & Heritage", href: "/experiences/culture" },
+    { label: "Nature & Scenic", href: "/experiences/nature" },
+    { label: "Family Friendly", href: "/experiences/family" },
+];
+
+const cards: WildlifeCard[] = [
+    {
+        slug: "klias-river-proboscis",
+        title: "Klias River Cruise — Proboscis & Fireflies (Demo)",
+        location: "Klias / Beaufort",
+        duration: "Half Day (PM)",
+        theme: "River",
+        blurb:
+            "Mangrove banks, long-nosed monkeys, and twinkling fireflies after sunset. Easy and photogenic.",
+        priceFrom: "RM180",
+        tags: ["Mangrove", "Boat", "Sunset"],
+    },
+    {
+        slug: "kinabatangan-river-safari",
+        title: "Kinabatangan River Safari (Demo)",
+        location: "Kinabatangan, Sandakan",
+        duration: "2D1N / 3D2N",
+        theme: "River",
+        blurb:
+            "Boat safaris at dawn and dusk for wild orangutans, hornbills, pygmy elephants, and crocodiles.",
+        priceFrom: "RM880",
+        tags: ["Pygmy Elephant", "Hornbill", "Orangutan"],
+    },
+    {
+        slug: "sepilok-sun-bear",
+        title: "Sepilok Orangutan & Sun Bear (Demo)",
+        location: "Sepilok, Sandakan",
+        duration: "Half / Full Day",
+        theme: "Conservation",
+        blurb:
+            "Close-up learning at world-class rehabilitation centres—gentle, educational, and family friendly.",
+        priceFrom: "RM260",
+        tags: ["Sanctuary", "Education", "Family"],
+    },
+    {
+        slug: "turtle-islands-night",
+        title: "Turtle Islands Night Experience (Demo)",
+        location: "Selingan / Turtle Islands Park",
+        duration: "Overnight",
+        theme: "Conservation",
+        blurb:
+            "Witness egg-laying (in season) and learn about hatchery work. Strictly regulated for turtle safety.",
+        priceFrom: "RM1,150",
+        tags: ["Turtles", "Rangers", "Night"],
+    },
+    {
+        slug: "danum-valley-wild-trek",
+        title: "Danum Valley Wild Trek (Demo)",
+        location: "Danum Valley Conservation Area, Lahad Datu",
+        duration: "3D2N / 4D3N",
+        theme: "Forest",
+        blurb:
+            "Primary rainforest, canopy views, and expert guides—deep-jungle biodiversity at its purest.",
+        priceFrom: "RM2,480",
+        tags: ["Primary Forest", "Biodiversity", "Guided"],
+    },
+    {
+        slug: "rainforest-night-walk",
+        title: "Rainforest Night Walk (Demo)",
+        location: "Kinabalu Park / Poring / Local Reserves",
+        duration: "2–3 Hours",
+        theme: "Forest",
+        blurb:
+            "Torch-lit stroll for slow loris (if lucky), frogs, bugs, and rainforest soundscapes after dark.",
+        priceFrom: "RM120",
+        tags: ["Nocturnal", "Easy", "Guided"],
+    },
+];
+
+function ThemeBadge({ theme }: { theme: WildlifeCard["theme"] }) {
+    const map = {
+        River: { cls: "bg-sky-50 text-sky-700 ring-sky-200", Icon: Fish },
+        Forest: { cls: "bg-emerald-50 text-emerald-700 ring-emerald-200", Icon: Leaf },
+        Conservation: { cls: "bg-amber-50 text-amber-700 ring-amber-200", Icon: Heart },
+    } as const;
+    const { cls, Icon } = map[theme];
+    return (
+        <span
+            className={`inline-flex items-center gap-1 rounded-full px-2.5 py-1 text-xs font-medium ring-1 ${cls}`}
+        >
+            <Icon className="h-3.5 w-3.5" />
+            {theme}
+        </span>
+    );
+}
 
 export default function WildlifePage() {
     return (
-        <main className="min-h-screen bg-gradient-to-b from-amber-50 to-white">
-            <section className="max-w-7xl mx-auto px-6 py-12">
-                <h1 className="text-3xl font-bold text-gray-800 mb-2">Wildlife</h1>
-                <p className="text-gray-600 mb-8">
-                    Demo only — proboscis monkeys, fireflies, orangutans. Real listings coming soon.
-                </p>
+        <main className="min-h-screen bg-gradient-to-b from-emerald-50 to-white">
+            {/* --- Hero --- */}
+            <section className="relative overflow-hidden">
+                <div className="mx-auto max-w-7xl px-6 pt-12 pb-8">
+                    <div className="flex flex-wrap items-start justify-between gap-6">
+                        <div>
+                            <p className="text-sm font-semibold tracking-wider text-emerald-700/90">
+                                Experiences
+                            </p>
+                            <h1 className="mt-2 text-3xl md:text-4xl font-extrabold text-gray-900 tracking-tight">
+                                Wildlife
+                            </h1>
+                            <p className="mt-3 max-w-2xl text-gray-600">
+                                River cruises, forest trails, and conservation visits. This is a{" "}
+                                <span className="font-medium text-gray-800">demo</span> showcase—real listings will
+                                appear once connected to your CMS.
+                            </p>
+                        </div>
 
+                        <div className="rounded-2xl bg-white/70 backdrop-blur ring-1 ring-gray-200 p-4 md:p-5">
+                            <div className="flex items-center gap-3">
+                                <Leaf className="h-6 w-6 text-emerald-600" />
+                                <div>
+                                    <p className="text-sm text-gray-500">Looking for islands or culture?</p>
+                                    <p className="text-sm font-medium text-gray-800">Switch categories below →</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* --- Sub-Navbar: Experiences --- */}
+                    <nav className="mt-8 -mx-2 overflow-x-auto">
+                        <ul className="flex min-w-full gap-2 pb-1">
+                            {experiencesNav.map((item) => (
+                                <li key={item.label} className="shrink-0">
+                                    <Link
+                                        href={item.href}
+                                        className={[
+                                            "inline-flex items-center rounded-full px-4 py-2 text-sm ring-1 transition",
+                                            item.active
+                                                ? "bg-emerald-600 text-white ring-emerald-600"
+                                                : "bg-white text-gray-700 ring-gray-200 hover:bg-gray-50",
+                                        ].join(" ")}
+                                        aria-current={item.active ? "page" : undefined}
+                                        title={item.active ? "You’re here" : "Coming soon"}
+                                    >
+                                        {item.label}
+                                    </Link>
+                                </li>
+                            ))}
+                        </ul>
+                    </nav>
+                </div>
+            </section>
+
+            {/* --- Cards --- */}
+            <section className="mx-auto max-w-7xl px-6 pb-16">
                 <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-                    <div className="rounded-xl border bg-white p-6">Klias River Cruise (Demo)</div>
-                    <div className="rounded-xl border bg-white p-6">Fireflies Night Tour (Demo)</div>
-                    <div className="rounded-xl border bg-white p-6">Orangutan Encounter (Demo)</div>
+                    {cards.map((c) => (
+                        <article
+                            key={c.slug}
+                            className="group relative overflow-hidden rounded-2xl bg-white ring-1 ring-gray-200 transition hover:shadow-lg"
+                        >
+                            {/* Simple graphic header (image-agnostic) */}
+                            <div className="h-28 bg-gradient-to-br from-emerald-200 via-emerald-100 to-white grid place-content-center">
+                                <Leaf className="h-8 w-8 text-emerald-700 opacity-80" />
+                            </div>
+
+                            <div className="p-6">
+                                <div className="flex items-center justify-between gap-2">
+                                    <ThemeBadge theme={c.theme} />
+                                    {c.priceFrom && (
+                                        <span className="text-sm font-semibold text-gray-900">
+                                            from {c.priceFrom}
+                                        </span>
+                                    )}
+                                </div>
+
+                                <h3 className="mt-3 text-lg font-semibold text-gray-900 group-hover:text-emerald-700">
+                                    {c.title}
+                                </h3>
+
+                                <p className="mt-2 flex items-center gap-2 text-sm text-gray-600">
+                                    <MapPin className="h-4 w-4" />
+                                    {c.location}
+                                </p>
+                                <p className="mt-1 flex items-center gap-2 text-sm text-gray-600">
+                                    <Clock className="h-4 w-4" />
+                                    {c.duration}
+                                </p>
+
+                                <p className="mt-3 text-sm text-gray-700">{c.blurb}</p>
+
+                                {c.tags && c.tags.length > 0 && (
+                                    <div className="mt-4 flex flex-wrap gap-2">
+                                        {c.tags.map((t) => (
+                                            <span
+                                                key={t}
+                                                className="rounded-full bg-emerald-50 text-emerald-800 ring-1 ring-emerald-200 px-2.5 py-1 text-xs"
+                                            >
+                                                {t}
+                                            </span>
+                                        ))}
+                                    </div>
+                                )}
+
+                                <div className="mt-6 flex items-center gap-3">
+                                    <Link
+                                        href={`/tours/${c.slug}`}
+                                        className="inline-flex items-center justify-center rounded-lg bg-emerald-600 px-3.5 py-2 text-sm font-medium text-white shadow-sm hover:bg-emerald-700 focus:outline-none focus:ring-2 focus:ring-emerald-600 focus:ring-offset-2"
+                                    >
+                                        View details
+                                    </Link>
+                                    <span className="text-xs text-gray-500">
+                                        Demo only — will link to real tour
+                                    </span>
+                                </div>
+                            </div>
+                        </article>
+                    ))}
+                </div>
+
+                {/* --- Bottom CTA --- */}
+                <div className="mt-10 flex flex-col items-center justify-center gap-4 rounded-2xl bg-white p-6 ring-1 ring-gray-200 md:flex-row md:gap-6">
+                    <p className="text-center text-sm text-gray-700">
+                        Want a custom wildlife itinerary?
+                    </p>
+                    <div className="flex gap-3">
+                        <Link
+                            href="/contact"
+                            className="inline-flex items-center justify-center rounded-lg bg-gray-900 px-4 py-2 text-sm font-medium text-white hover:bg-black"
+                        >
+                            Talk to a planner
+                        </Link>
+                        <Link
+                            href="/book-now"
+                            className="inline-flex items-center justify-center rounded-lg bg-white px-4 py-2 text-sm font-medium text-gray-900 ring-1 ring-gray-300 hover:bg-gray-50"
+                        >
+                            Quick enquiry
+                        </Link>
+                    </div>
                 </div>
             </section>
         </main>
